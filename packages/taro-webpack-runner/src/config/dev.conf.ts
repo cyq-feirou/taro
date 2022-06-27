@@ -1,3 +1,7 @@
+/**
+ * @description dev时，生成对应配置的函数
+ */
+
 import * as path from 'path'
 import { get, mapValues, merge } from 'lodash'
 import { addLeadingSlash, addTrailingSlash } from '../util'

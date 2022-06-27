@@ -60,7 +60,7 @@ const printFailed = () => {
     text: chalk.red('Failed to compile.\n')
   })
 }
-
+// 编译前打印
 const printWhenBeforeCompile = compiler => {
   compiler.hooks.beforeCompile.tap('taroBeforeCompile', () => {
     printCompiling()
@@ -130,6 +130,7 @@ const _printWhenDone = ({ verbose = false }, compiler) => {
   })
   return compiler
 }
+// partial创建一个函数。 该函数调用 _printWhenDone，并传入预设的参数{ verbose: false }。 这个方法类似 _.bind，除了它不会绑定 this。 这个 _.partial.placeholder 的值，默认是以 _ 作为附加部分参数的占位符。
 
 const printWhenDone = partial(_printWhenDone, [{ verbose: false }])
 

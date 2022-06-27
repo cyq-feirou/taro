@@ -18,7 +18,9 @@ import MainPlugin from '../plugins/MainPlugin'
 import { getPostcssPlugins } from '../config/postcss.conf'
 import { Option, BuildConfig } from './types'
 
+// 生成配置config
 export const makeConfig = async (buildConfig: BuildConfig) => {
+  // Merged sass loader option.
   const sassLoaderOption = await getSassLoaderOption(buildConfig)
   return {
     ...buildConfig,

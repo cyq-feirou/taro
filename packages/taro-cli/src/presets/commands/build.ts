@@ -3,6 +3,7 @@ import * as hooks from '../constant'
 import configValidator from '../../doctor/configValidator'
 
 export default (ctx: IPluginContext) => {
+  // 通过applyPlugins的build指令遍历hooks-promise进行异步解析参数，在循环外部调用对应的平台方法执行
   ctx.registerCommand({
     name: 'build',
     optionsMap: {
@@ -78,6 +79,7 @@ export default (ctx: IPluginContext) => {
       const isBuildNativeComp = _[1] === 'native-components'
 
       await ctx.applyPlugins(hooks.ON_BUILD_START)
+      // 执行对应平台方法（h5）插件
       await ctx.applyPlugins({
         name: platform,
         opts: {

@@ -16,6 +16,7 @@ export default class CLI {
   }
 
   parseArgs () {
+    // ???
     const args = minimist(process.argv.slice(2), {
       alias: {
         version: ['v'],
@@ -31,6 +32,7 @@ export default class CLI {
       },
       boolean: ['version', 'help']
     })
+    console.log(args, 'argsargs====')
     const _ = args._
     const command = _[0]
     if (command) {

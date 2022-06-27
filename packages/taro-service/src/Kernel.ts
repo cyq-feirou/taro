@@ -70,6 +70,7 @@ export default class Kernel extends EventEmitter {
     this.initPaths()
   }
 
+  // 根据业务项目的config/index.js文件内容，初始化initialConfig
   initConfig () {
     this.config = new Config({
       appPath: this.appPath
@@ -78,6 +79,7 @@ export default class Kernel extends EventEmitter {
     this.debugger('initConfig', this.initialConfig)
   }
 
+  // 初始化相关路径
   initPaths () {
     this.paths = {
       appPath: this.appPath,
@@ -93,6 +95,7 @@ export default class Kernel extends EventEmitter {
     this.debugger(`initPaths:${JSON.stringify(this.paths, null, 2)}`)
   }
 
+  // 获取helper 对象
   initHelper () {
     this.helper = helper
     this.debugger('initHelper')
@@ -103,6 +106,7 @@ export default class Kernel extends EventEmitter {
     const allConfigPresets = mergePlugins(this.optsPresets || [], initialConfig.presets || [])()
     const allConfigPlugins = mergePlugins(this.optsPlugins || [], initialConfig.plugins || [])()
     this.debugger('initPresetsAndPlugins', allConfigPresets, allConfigPlugins)
+    // ？？？
     process.env.NODE_ENV !== 'test' &&
     createBabelRegister({
       only: [...Object.keys(allConfigPresets), ...Object.keys(allConfigPlugins)]
@@ -329,7 +333,7 @@ export default class Kernel extends EventEmitter {
         }
       })
     }
-
+    // 调用build插件，然后执行对应平台（h5/weapp)方法
     await this.applyPlugins({
       name,
       opts

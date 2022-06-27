@@ -1,3 +1,8 @@
+/**
+ * @description build时，生成对应配置的函数
+ */
+
+// 类型定义
 import { BuildConfig } from '../util/types'
 
 export default ({
