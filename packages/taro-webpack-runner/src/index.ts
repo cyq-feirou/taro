@@ -45,7 +45,6 @@ const buildProd = async (appPath: string, config: BuildConfig): Promise<void> =>
   compiler.hooks.emit.tapAsync('taroBuildDone', async (compilation, callback) => {
     if (typeof config.modifyBuildAssets === 'function') {
       // 通过config.modifyBuildAssets 处理 compilation.assets 产物（修改编译后的结果）
-      // 此处产物如何传递下去？
       await config.modifyBuildAssets(compilation.assets)
     }
     callback()
@@ -85,7 +84,7 @@ const buildProd = async (appPath: string, config: BuildConfig): Promise<void> =>
 }
 // dev开发编译
 const buildDev = async (appPath: string, config: BuildConfig): Promise<any> => {
-  // 获取 将用户配置的属性
+  // 获取 用户配置的属性
   const conf = buildConf(config)
   // 获取build需要的router配置
   const routerConfig = config.router || {}

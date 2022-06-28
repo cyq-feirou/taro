@@ -14,6 +14,7 @@ export default (ctx: IPluginContext) => {
       const { port } = ctx.runOpts
       const { emptyDirectory, recursiveMerge, npm, ENTRY, SOURCE_DIR, OUTPUT_DIR } = ctx.helper
       emptyDirectory(outputPath)
+      // export const ENTRY = 'app'
       const entryFileName = `${ENTRY}.config`
       const entryFile = path.basename(entryFileName)
       const defaultEntry = {

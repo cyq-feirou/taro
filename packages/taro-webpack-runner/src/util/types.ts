@@ -1,3 +1,6 @@
+/**
+ * @description 类型定义文件
+ */
 import * as webpack from 'webpack'
 import { IProjectBaseConfig, IH5Config } from '@tarojs/taro/types/compile'
 

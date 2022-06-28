@@ -1,3 +1,6 @@
+/**
+ * @description 获取loader和plugin的函数
+ */
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import { recursiveMerge, REG_SCRIPTS, REG_SASS_SASS, REG_SASS_SCSS, REG_LESS, REG_STYLUS, REG_STYLE, REG_MEDIA, REG_FONT, REG_IMAGE } from '@tarojs/helper'
@@ -226,7 +229,7 @@ export const getCopyWebpackPlugin = ({ copy, appPath }: { copy: ICopyOptions; ap
   ]
   return partial(getPlugin, CopyWebpackPlugin)(args)
 }
-
+// 获取 react/vue框架 相关的插件
 export const getMainPlugin = args => {
   return partial(getPlugin, MainPlugin)([args])
 }

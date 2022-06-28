@@ -21,7 +21,7 @@ import { BuildConfig } from '../util/types'
 import getBaseChain from './base.conf'
 
 export default function (appPath: string, config: Partial<BuildConfig>): any {
-  // 获取基础webpack chain 配置实例
+  // 获取 webpack chain 配置实例
   const chain = getBaseChain(appPath, config)
   const {
     alias = emptyObj,

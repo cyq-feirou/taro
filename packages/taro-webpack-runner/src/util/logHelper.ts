@@ -1,3 +1,6 @@
+/**
+ * @description 日志输出helper
+ */
 import { chalk } from '@tarojs/helper'
 import * as ora from 'ora'
 import { partial, pipe } from 'lodash/fp'

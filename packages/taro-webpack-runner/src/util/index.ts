@@ -1,3 +1,6 @@
+/**
+ * @description 处理路径的文件
+ */
 import * as path from 'path'
 
 import { networkInterfaces } from 'os'

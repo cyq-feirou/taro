@@ -106,7 +106,6 @@ export default class Kernel extends EventEmitter {
     const allConfigPresets = mergePlugins(this.optsPresets || [], initialConfig.presets || [])()
     const allConfigPlugins = mergePlugins(this.optsPlugins || [], initialConfig.plugins || [])()
     this.debugger('initPresetsAndPlugins', allConfigPresets, allConfigPlugins)
-    // ？？？
     process.env.NODE_ENV !== 'test' &&
     createBabelRegister({
       only: [...Object.keys(allConfigPresets), ...Object.keys(allConfigPlugins)]
@@ -336,7 +335,7 @@ export default class Kernel extends EventEmitter {
     }
     // 调用build插件，然后执行对应平台（h5/weapp)方法
     await this.applyPlugins({
-      name,
+      name, // build
       opts
     })
   }
