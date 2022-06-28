@@ -22,7 +22,9 @@ import getBaseChain from './base.conf'
 const emptyObj = {}
 
 export default function (appPath: string, config: Partial<BuildConfig>): any {
+  // 获取基础webpack chain 配置实例
   const chain = getBaseChain(appPath, config)
+  // 将用户自定义配置结构赋值
   const {
     alias = {},
     copy,
@@ -65,7 +67,7 @@ export default function (appPath: string, config: Partial<BuildConfig>): any {
   const plugin = {} as any
 
   const isMultiRouterMode = get(router, 'mode') === 'multi'
-
+  // 根据选择的语言框架（react/vue),获取对应的插件
   plugin.mainPlugin = getMainPlugin({
     framework: config.framework,
     entryFileName,
@@ -78,6 +80,7 @@ export default function (appPath: string, config: Partial<BuildConfig>): any {
   })
 
   if (enableExtract) {
+    // 处理css样式，抽离样式到样式表的插件
     plugin.miniCssExtractPlugin = getMiniCssExtractPlugin([
       {
         filename: 'css/[name].css',
@@ -86,7 +89,7 @@ export default function (appPath: string, config: Partial<BuildConfig>): any {
       miniCssExtractPluginOption
     ])
   }
-
+  // 复制插件添加
   if (copy) {
     plugin.copyWebpackPlugin = getCopyWebpackPlugin({ copy, appPath })
   }

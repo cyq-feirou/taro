@@ -151,6 +151,7 @@ export default class Kernel extends EventEmitter {
     }
   }
 
+  // 初始化插件
   initPlugin (plugin: IPlugin) {
     const { id, path, opts, apply } = plugin
     const pluginCtx = this.initPluginCtx({ id, path, ctx: this })

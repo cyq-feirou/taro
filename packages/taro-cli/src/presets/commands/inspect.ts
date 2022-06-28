@@ -50,7 +50,7 @@ export default (ctx: IPluginContext) => {
             ...config,
             isWatch: !isProduction,
             mode: isProduction ? 'production' : 'development',
-            async modifyWebpackChain (chain, webpack) {
+            async modifyWebpackChain (chain, webpack) { // 编译中修改 webpack 配置，在这个钩子中，你可以对 webpackChain 作出想要的调整，等同于配置 webpackChain
               await ctx.applyPlugins({
                 name: 'modifyWebpackChain',
                 initialVal: chain,

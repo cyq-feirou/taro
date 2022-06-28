@@ -17,7 +17,7 @@ const printCompiling = () => {
   getServeSpinner().text = 'Compiling...'
   getServeSpinner().start()
 }
-
+// 打印build错误日志
 const printBuildError = (err: Error): void => {
   const message = err.message
   const stack = err.stack
@@ -150,6 +150,7 @@ const bindDevLogger = (devUrl, compiler) => {
 
 const bindProdLogger = compiler => {
   console.log()
+  // 管道函数， 按顺序执行；
   pipe(
     printWhenBeforeCompile,
     printWhenDoneVerbosely,

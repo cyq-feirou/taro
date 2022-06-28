@@ -1,3 +1,6 @@
+/**
+ * @description prod build 的配置文件
+ */
 import * as path from 'path'
 import { get, mapValues, merge } from 'lodash'
 import { addTrailingSlash, emptyObj } from '../util'
@@ -18,6 +21,7 @@ import { BuildConfig } from '../util/types'
 import getBaseChain from './base.conf'
 
 export default function (appPath: string, config: Partial<BuildConfig>): any {
+  // 获取基础webpack chain 配置实例
   const chain = getBaseChain(appPath, config)
   const {
     alias = emptyObj,
@@ -64,7 +68,7 @@ export default function (appPath: string, config: Partial<BuildConfig>): any {
   const isMultiRouterMode = get(router, 'mode') === 'multi'
 
   const plugin: any = {}
-
+  // 根据选择的语言框架（react/vue),获取对应的插件
   plugin.mainPlugin = getMainPlugin({
     framework: config.framework,
     entryFileName,

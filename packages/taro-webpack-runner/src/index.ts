@@ -15,7 +15,7 @@ import { BuildConfig, Func } from './util/types'
 import { makeConfig } from './util/chain'
 import type { Compiler } from 'webpack'
 
-//
+// 修改 webpackChain 配置
 export const customizeChain = async (chain, modifyWebpackChainFunc: Func, customizeFunc?: Func) => {
   if (modifyWebpackChainFunc instanceof Function) {
     await modifyWebpackChainFunc(chain, webpack)
@@ -26,40 +26,42 @@ export const customizeChain = async (chain, modifyWebpackChainFunc: Func, custom
 }
 // build打包编译
 const buildProd = async (appPath: string, config: BuildConfig): Promise<void> => {
-  // 获取webpack配置？？？
+  // 获取 webpack chain 配置实例： 将用户配置的属性和默认值属性进行合并（简单配置和插件的整合）
   const webpackChain = prodConf(appPath, config)
-  // 将所有webpackChain合并？？？
+  // 修改 webpackChain 配置
   await customizeChain(webpackChain, config.modifyWebpackChain, config.webpackChain)
-  // 通知webpackChain 已经准备好
+  // 通知 webpack配置 已经整合完成, commond==='inspect' 才用到
   if (typeof config.onWebpackChainReady === 'function') {
     config.onWebpackChainReady(webpackChain)
   }
-  // webpackConfig 配置
+  // 导出这个修改完成的要被 webpack 使用的配置对象
   const webpackConfig = webpackChain.toConfig()
-  // webpack根据webpackConfig配置 生成一个 compiler 对象
+  // webpack根据webpackConfig配置 实例化一个 compiler 对象
   const compiler = webpack(webpackConfig)
+  // buildFinish 监听函数
   const onBuildFinish = config.onBuildFinish
-  // compiler对象在编译完成时触发一个taroBuildDone事件，告诉它编译完成，？？？
-  // taroBuildDone?何时触发
+  // compiler 的生命周期中 emit钩子： 生成资源到 output 目录之前。
+  // 在这个钩子上注册 一个name=taroBuildDone 插件，fn：通过 config.modifyBuildAssets 修改编译后的结果
   compiler.hooks.emit.tapAsync('taroBuildDone', async (compilation, callback) => {
     if (typeof config.modifyBuildAssets === 'function') {
-      // ??
+      // 通过config.modifyBuildAssets 处理 compilation.assets 产物（修改编译后的结果）
+      // 此处产物如何传递下去？
       await config.modifyBuildAssets(compilation.assets)
     }
     callback()
   })
   // 返回promise
   return new Promise((resolve, reject) => {
-    // 绑定compiler编译生命周期打印函数
+    // 在compiler编译生命周期的某些钩子添加输出日志插件
     bindProdLogger(compiler)
-    // 执行compiler.run 进行编译  compiler.run ???
+    // 执行compiler.run 进行编译
     compiler.run((err, stats) => {
       // 判断是否报错
       if (err) {
-        // 打印错误
+        // 打印build错误日志
         printBuildError(err)
         if (typeof onBuildFinish === 'function') {
-          // onBuildFinish
+          // 执行config配置的onBuildFinish
           onBuildFinish({
             error: err,
             stats: null,
@@ -70,6 +72,7 @@ const buildProd = async (appPath: string, config: BuildConfig): Promise<void> =>
       }
       // 编译完成
       if (typeof onBuildFinish === 'function') {
+        // 执行config配置的onBuildFinish
         onBuildFinish({
           error: err,
           stats,
@@ -82,7 +85,7 @@ const buildProd = async (appPath: string, config: BuildConfig): Promise<void> =>
 }
 // dev开发编译
 const buildDev = async (appPath: string, config: BuildConfig): Promise<any> => {
-  // 获取build需要的配置信息
+  // 获取 将用户配置的属性
   const conf = buildConf(config)
   // 获取build需要的router配置
   const routerConfig = config.router || {}
@@ -92,17 +95,17 @@ const buildDev = async (appPath: string, config: BuildConfig): Promise<any> => {
   const publicPath = conf.publicPath ? addLeadingSlash(addTrailingSlash(conf.publicPath)) : '/'
   const outputPath = path.join(appPath, conf.outputRoot as string)
   const customDevServerOption = config.devServer || {}
-  // 获取webpack配置？？？
+  // 获取 webpack chain 配置实例： 将用户配置的属性和默认值属性进行合并，（简单配置和插件的整合）
   const webpackChain = devConf(appPath, config)
   // 打包finish后的监听
   const onBuildFinish = config.onBuildFinish
-  // 将所有webpackChain合并？？？
+  // 修改 webpackChain 配置
   await customizeChain(webpackChain, config.modifyWebpackChain, config.webpackChain)
-  // 通知webpackChain 已经准备好
+  // 通知 webpack配置 已经整合完成, commond==='inspect' 才用到
   if (typeof config.onWebpackChainReady === 'function') {
     config.onWebpackChainReady(webpackChain)
   }
-  // web服务器启动参数？
+  // web服务器启动参数
   const devServerOptions = recursiveMerge<WebpackDevServer.Configuration>(
     {
       publicPath,
@@ -149,25 +152,27 @@ const buildDev = async (appPath: string, config: BuildConfig): Promise<any> => {
     port: devServerOptions.port,
     pathname
   })
-  // webpackConfig 配置
+  // 导出这个修改完成的要被 webpack 使用的配置对象
   const webpackConfig = webpackChain.toConfig()
   // 想要启用 HMR，还需要修改 webpack 配置对象，使其包含 HMR 入口起点。webpack-dev-server package 中具有一个叫做 addDevServerEntrypoints 的方法，你可以通过使用这个方法来实现。
   WebpackDevServer.addDevServerEntrypoints(webpackConfig, devServerOptions)
-  // webpack根据webpackConfig配置 生成一个 compiler 对象
+  // webpack根据webpackConfig配置 实例化一个 compiler 对象
   const compiler = webpack(webpackConfig) as Compiler
-  // 绑定compiler编译生命周期打印函数
+  // 在compiler编译生命周期的某些钩子添加输出日志插件
   bindDevLogger(devUrl, compiler)
   // 当使用 webpack dev server 和 Node.js API 时，不要将 dev server 选项放在 webpack 配置对象(webpack config object)中。而是，在创建选项时，将其作为第二个参数devServerOptions传递。
   const server = new WebpackDevServer(compiler, devServerOptions)
-  // 添加监听：compiler对象在emit时触发一个taroBuildDone事件，告诉它编译完成，？？？
+  // compiler 的生命周期中 emit钩子： 生成资源到 output 目录之前。
+  // 在这个钩子上注册 一个taroBuildDone 插件，通过 config.modifyBuildAssets 修改编译后的结果
   compiler.hooks.emit.tapAsync('taroBuildDone', async (compilation, callback) => {
     if (typeof config.modifyBuildAssets === 'function') {
-      // 通知产物处理完成？
+      // 通过config.modifyBuildAssets 处理 compilation.assets 产物（修改编译后的结果）
       await config.modifyBuildAssets(compilation.assets)
     }
     callback()
   })
-  // 添加监听：compiler对象在编译完成时触发一个taroBuildDone事件，告诉它编译完成，？？？
+  // compiler 的生命周期中 done钩子： 编译(compilation)完成。
+  // 在这个钩子上注册 一个taroBuildDone 插件，执行 onBuildFinish
   compiler.hooks.done.tap('taroBuildDone', stats => {
     if (typeof onBuildFinish === 'function') {
       // 执行编译完成回调
@@ -178,7 +183,8 @@ const buildDev = async (appPath: string, config: BuildConfig): Promise<any> => {
       })
     }
   })
-  // 添加监听：compiler对在编译失败时象触发一个taroBuildDone事件，执行onBuildFinish函数，把错误信息传递过去，？？？
+  // compiler 的生命周期中 failed钩子： 编译(compilation)失败。
+  // 在这个钩子上注册 一个taroBuildDone 插件，执行 onBuildFinish
   compiler.hooks.failed.tap('taroBuildDone', error => {
     if (typeof onBuildFinish === 'function') {
       onBuildFinish({

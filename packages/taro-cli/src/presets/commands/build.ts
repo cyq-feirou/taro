@@ -90,6 +90,7 @@ export default (ctx: IPluginContext) => {
             blended,
             isBuildNativeComp,
             async modifyWebpackChain (chain, webpack, data) {
+              // 编译中修改 webpack 配置，在这个钩子中，你可以对 webpackChain 作出想要的调整，等同于配置 webpackChain
               await ctx.applyPlugins({
                 name: hooks.MODIFY_WEBPACK_CHAIN,
                 initialVal: chain,

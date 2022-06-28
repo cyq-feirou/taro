@@ -22,7 +22,7 @@ interface IMainPluginOptions {
   designWidth: number
   loaderMeta?: Record<string, string>
 }
-
+// 语言框架处理插件
 export default class MainPlugin {
   options: IMainPluginOptions
   appEntry: string
