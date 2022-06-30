@@ -156,6 +156,7 @@ export default class Kernel extends EventEmitter {
     const pluginCtx = this.initPluginCtx({ id, path, ctx: this })
     this.debugger('initPlugin', plugin)
     this.registerPlugin(plugin)
+    // 执行获取到的模块，实现插件注册
     apply()(pluginCtx, opts)
     this.checkPluginOpts(pluginCtx, opts)
   }
@@ -201,6 +202,7 @@ export default class Kernel extends EventEmitter {
         pluginCtx.registerMethod(name)
       }
     })
+    // 代理pluginCtx对像到kernel实例上，返回对应的属性和方法
     return new Proxy(pluginCtx, {
       get: (target, name: string) => {
         if (this.methods.has(name)) {

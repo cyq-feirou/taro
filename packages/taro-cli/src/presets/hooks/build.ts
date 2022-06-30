@@ -14,6 +14,7 @@ export default (ctx: IPluginContext) => {
     hooks.ON_BUILD_COMPLETE,
     hooks.MODIFY_RUNNER_OPTS
   ].forEach(methodName => {
+    // 单纯注册， fn?? 可以是通过配置传进来吗？
     ctx.registerMethod(methodName)
   })
 }

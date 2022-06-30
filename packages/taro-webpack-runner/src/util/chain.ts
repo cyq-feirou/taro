@@ -10,6 +10,7 @@ import CssoWebpackPlugin from 'csso-webpack-plugin'
 import * as sass from 'sass'
 import * as HtmlWebpackPlugin from 'html-webpack-plugin'
 import { partial } from 'lodash'
+// pipe 参数函数从左往右执行
 import { mapKeys, pipe } from 'lodash/fp'
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import { join, resolve } from 'path'
@@ -187,7 +188,7 @@ const getExtractCssLoader = () => {
 export const getMiniCssExtractPlugin = pipe(
   mergeOption,
   listify,
-  partial(getPlugin, MiniCssExtractPlugin)
+  partial(getPlugin, MiniCssExtractPlugin)// {plugin: MiniCssExtractPlugin}
 )
 export const getHtmlWebpackPlugin = pipe(
   mergeOption,
