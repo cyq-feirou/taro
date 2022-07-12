@@ -1,4 +1,5 @@
 import * as webpack from 'webpack'
+// loader-utils是一个webpack工具类,通过一些方法配合loader处理文件
 import { getOptions, stringifyRequest } from 'loader-utils'
 import { AppConfig } from '@tarojs/taro'
 import { join, dirname } from 'path'
@@ -33,6 +34,7 @@ export default function (this: webpack.loader.LoaderContext) {
   const config: AppConfig = options.config
   const pages: Map<string, string> = options.pages
   const pxTransformConfig = options.pxTransformConfig
+  // 组合 tabBarCode 运行时的代码
   let tabBarCode = `var tabbarIconPath = []
 var tabbarSelectedIconPath = []
 `
@@ -51,6 +53,7 @@ var tabbarSelectedIconPath = []
     }
   }
 
+  // 组合 web组件 运行时 要加载的依赖（用于解析组件）
   const webComponents = `
 import { defineCustomElements, applyPolyfills } from '@tarojs/components/loader'
 import '@tarojs/components/dist/taro-components/taro-components.css'
@@ -59,11 +62,12 @@ applyPolyfills().then(function () {
   defineCustomElements(window)
 })
 `
-
+// 如果在 H5 端使用兼容性组件库（useHtmlComponents）则加载 compatComponentImport 相关依赖包，否则使用 taro components loader;
   const components = options.useHtmlComponents ? compatComponentImport || '' : webComponents
-
+  // 核心代码
+  // import component from './app';
   const code = `import { createRouter, initPxTransform } from '@tarojs/taro'
-import component from ${stringify(join(dirname(this.resourcePath), options.filename))}
+  import component from ${stringify(join(dirname(this.resourcePath), options.filename))} 
 import { window } from '@tarojs/runtime'
 import { ${creator} } from '${creatorLocation}'
 ${importFrameworkStatement}

@@ -82,8 +82,8 @@ export default class MainPlugin {
               framework,
               loaderMeta,
               filename: entryFileName,
-              pages: this.pagesConfigList,
-              useHtmlComponents: this.options.useHtmlComponents,
+              pages: this.pagesConfigList, // 这里包含主包和分包的所有页面地址
+              useHtmlComponents: this.options.useHtmlComponents, // 用于控制在 H5 端是否使用兼容性组件库
               config: {
                 router: this.options.routerConfig,
                 ...this.appConfig
@@ -175,6 +175,7 @@ export default class MainPlugin {
     })
   }
 
+  // 获取appConfig配置
   getAppConfig () {
     const appConfigPath = this.getConfigFilePath(this.appEntry)
     const appConfig = readConfig(appConfigPath)
