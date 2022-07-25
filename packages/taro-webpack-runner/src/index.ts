@@ -219,7 +219,7 @@ const buildDev = async (appPath: string, config: BuildConfig): Promise<any> => {
 }
 
 export default async (appPath: string, config: BuildConfig): Promise<void> => {
-  // Merged sass loader option.
+  // Merged  sass loader option.
   const newConfig: BuildConfig = await makeConfig(config)
   // 是否是监听状态
   if (newConfig.isWatch) {

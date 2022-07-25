@@ -60,6 +60,7 @@ export function resolvePresetsOrPlugins (root: string, args, type: PluginType): 
         process.exit(1)
       }
     }
+    // webpack 插件模式？？？
     return {
       id: fPath,
       path: fPath,
