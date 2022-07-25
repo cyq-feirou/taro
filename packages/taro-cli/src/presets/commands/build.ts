@@ -97,7 +97,7 @@ export default (ctx: IPluginContext) => {
                 opts: {
                   chain,
                   webpack,
-                  data
+                  data // weapp有传，componentConfig配置
                 }
               })
             },
@@ -111,6 +111,7 @@ export default (ctx: IPluginContext) => {
                 }
               })
             },
+            // minconfig?
             async modifyMiniConfigs (configMap) {
               await ctx.applyPlugins({
                 name: hooks.MODIFY_MINI_CONFIGS,
@@ -120,6 +121,7 @@ export default (ctx: IPluginContext) => {
                 }
               })
             },
+            // weapp用到， taro-plugin-html/src/index.ts 里面使用ctx.modifyComponentConfig的方式给hooks.MODIFY_COMPONENT_CONFIG插件添加fn?？？
             async modifyComponentConfig (componentConfig, config) {
               await ctx.applyPlugins({
                 name: hooks.MODIFY_COMPONENT_CONFIG,

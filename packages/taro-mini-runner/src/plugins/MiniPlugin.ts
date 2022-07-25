@@ -252,6 +252,7 @@ export default class TaroMiniPlugin {
       compilation.hooks.normalModuleLoader.tap(PLUGIN_NAME, (_loaderContext, module:/** TaroNormalModule */ any) => {
         const { framework, loaderMeta, designWidth, deviceRatio } = this.options
         if (module.miniType === META_TYPE.ENTRY) {
+          // 添加app 解析的loader
           const loaderName = '@tarojs/taro-loader'
           if (!isLoaderExist(module.loaders, loaderName)) {
             module.loaders.unshift({
@@ -273,6 +274,7 @@ export default class TaroMiniPlugin {
             })
           }
         } else if (module.miniType === META_TYPE.PAGE) {
+          // 添加page 解析的loader
           let isIndependent = false
           this.independentPackages.forEach(pages => {
             if (pages.includes(module.resource)) {
@@ -296,6 +298,7 @@ export default class TaroMiniPlugin {
             })
           }
         } else if (module.miniType === META_TYPE.COMPONENT) {
+          // 添加components 解析的loader
           const loaderName = isBuildPlugin ? '@tarojs/taro-loader/lib/native-component' : '@tarojs/taro-loader/lib/component'
           if (!isLoaderExist(module.loaders, loaderName)) {
             module.loaders.unshift({

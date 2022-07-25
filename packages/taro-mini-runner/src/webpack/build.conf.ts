@@ -98,6 +98,7 @@ export default (appPath: string, mode, config: Partial<IBuildConfig>): any => {
   const sourceDir = path.join(appPath, sourceRoot)
   const outputDir = path.join(appPath, outputRoot)
   const taroBaseReg = /@tarojs[\\/][a-z]+/
+  // 打包插件的处理
   if (isBuildPlugin) {
     const patterns = copy ? copy.patterns : []
     patterns.push({
@@ -106,13 +107,16 @@ export default (appPath: string, mode, config: Partial<IBuildConfig>): any => {
     })
     copy = Object.assign({}, copy, { patterns })
   }
+  // 复制插件的处理
   if (copy) {
     plugin.copyWebpackPlugin = getCopyWebpackPlugin({ copy, appPath })
   }
+  // '@tarojs/components'
   alias[taroJsComponents + '$'] = taroComponentsPath || `${taroJsComponents}/mini`
 
   env.FRAMEWORK = JSON.stringify(framework)
   env.TARO_ENV = JSON.stringify(buildAdapter)
+  // runtimeConstants？？？
   const runtimeConstants = getRuntimeConstants(runtime)
   const constantsReplaceList = mergeOption([processEnvOption(env), defineConstants, runtimeConstants])
   const entryRes = getEntry({
@@ -124,6 +128,7 @@ export default (appPath: string, mode, config: Partial<IBuildConfig>): any => {
     ? ['plugin/runtime', 'plugin/vendors', 'plugin/taro', 'plugin/common']
     : ['runtime', 'vendors', 'taro', 'common']
   let customCommonChunks = defaultCommonChunks
+  // 分包配置处理
   if (typeof commonChunks === 'function') {
     customCommonChunks = commonChunks(defaultCommonChunks.concat()) || defaultCommonChunks
   } else if (Array.isArray(commonChunks) && commonChunks.length) {

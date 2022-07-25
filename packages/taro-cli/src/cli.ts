@@ -85,6 +85,7 @@ export default class CLI {
             case 'tt':
             case 'qq':
             case 'jd':
+              // @tarojs/plugin-platform-weapp: 加载的就是taro-weapp核心包，这个核心包注册了kernel weapp插件
               kernel.optsPlugins.push(`@tarojs/plugin-platform-${platform}`)
               break
             default: {
@@ -108,6 +109,7 @@ export default class CLI {
               kernel.optsPlugins.push('@tarojs/plugin-framework-vue3')
               break
             default:
+              // @tarojs/plugin-framework-react
               kernel.optsPlugins.push('@tarojs/plugin-framework-react')
               break
           }

@@ -11,6 +11,15 @@ export default function (this: webpack.loader.LoaderContext) {
   const blended = options.blended
   const pxTransformConfig = options.pxTransformConfig
   const loaders = this.loaders
+  // loaders
+  // [
+  //     {
+  //       path: '@tarojs/taro-loader',
+  //     },
+  //     {
+  //       path: '/Users/xmly/Desktop/myApp/node_modules/babel-loader/lib/index.js',
+  //     }
+  //   ]
   const thisLoaderIndex = loaders.findIndex(item => normalizePath(item.path).indexOf('@tarojs/taro-loader') >= 0)
   const { globalObject } = this._compilation.outputOptions
 

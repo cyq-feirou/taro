@@ -72,6 +72,7 @@ export default class MainPlugin {
     )
 
     compiler.hooks.compilation.tap(PLUGIN_NAME, compilation => {
+      // 访问 loader
       compilation.hooks.normalModuleLoader.tap(PLUGIN_NAME, (_loaderContext, module: any) => {
         const { framework, entryFileName, designWidth, deviceRatio, loaderMeta } = this.options
         const { dir, name } = path.parse(module.resource)

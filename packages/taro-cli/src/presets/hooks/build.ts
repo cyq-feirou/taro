@@ -14,6 +14,6 @@ export default (ctx: IPluginContext) => {
     hooks.ON_BUILD_COMPLETE,
     hooks.MODIFY_RUNNER_OPTS
   ].forEach(methodName => {
-    ctx.registerMethod(methodName)
+    ctx.registerMethod(methodName) // ???
   })
 }

@@ -31,6 +31,7 @@ export default class Weapp extends TaroPlatformBase {
    */
   constructor (ctx, config, pluginOptions?: IOptions) {
     super(ctx, config)
+    // 微信小程序模板
     this.template = new Template(pluginOptions)
     this.setupTransaction.addWrapper({
       close () {
@@ -49,6 +50,7 @@ export default class Weapp extends TaroPlatformBase {
     template.voidElements.add('voip-room')
     template.focusComponents.add('editor')
     if (pluginOptions?.enablekeyboardAccessory) {
+      // 根据配置，对小程序的input、textarea组建做特殊处理
       template.voidElements.delete('input')
       template.voidElements.delete('textarea')
     }

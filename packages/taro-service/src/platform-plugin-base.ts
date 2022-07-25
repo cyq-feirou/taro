@@ -144,6 +144,7 @@ ${exampleCommand}
   }
 
   private async buildImpl (extraOptions) {
+    // 从这里进入mini-runner
     const runner = await this.getRunner()
     const options = this.getOptions(Object.assign({
       runtimePath: this.runtimePath,

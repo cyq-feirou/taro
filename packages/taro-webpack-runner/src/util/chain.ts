@@ -81,7 +81,7 @@ const listify = listOrItem => {
   }
   return [listOrItem]
 }
-
+// 返回插件类和入参数
 const getPlugin = (plugin: any, args: Option[]) => {
   return {
     plugin,
@@ -231,6 +231,7 @@ export const getCopyWebpackPlugin = ({ copy, appPath }: { copy: ICopyOptions; ap
 }
 // 获取 react/vue框架 相关的插件
 export const getMainPlugin = args => {
+  // 将args 和 MainPlugin传给 getPlugin，然后调用了getPlugin
   return partial(getPlugin, MainPlugin)([args])
 }
 

@@ -60,7 +60,7 @@ export default async function build (appPath: string, config: IBuildConfig): Pro
         onFinish(error, null)
         return reject(error)
       }
-
+      // 预加载处理
       if (!isEmpty(newConfig.prerender)) {
         prerender = prerender ?? new Prerender(newConfig, webpackConfig, stats, config.template.Adapter)
         await prerender.render()

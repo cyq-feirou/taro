@@ -137,7 +137,6 @@ export class Prerender {
     }
 
     await this.writeScript('app')
-
     if (!this.appLoaded) {
       try {
         this.vm.run(`

@@ -107,6 +107,7 @@ export async function getSassLoaderOption (
   const { resource, projectDirectory } = sass
   if (resource) {
     checkPath(resource, projectDirectory)
+    // 这一步有点疑惑？
     const content = await getBundleContent(resource, projectDirectory)
     bundledContent += content
   }
